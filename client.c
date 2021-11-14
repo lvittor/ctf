@@ -9,101 +9,94 @@
 
 int main(int argc, char const *argv[])
 {
-    /* Open the file for reading */
-    char *line_buf = NULL;
-    size_t line_buf_size = 0;
-    int line_count = 0;
-    ssize_t line_size;
-    FILE *fp = fopen(FILENAME, "r");
-    if (!fp)
-    {
-        fprintf(stderr, "Error opening file '%s'\n", FILENAME);
-        return 1;
-    }
-    
-    /* Open the socket for writing */
-    int sock;
-    struct sockaddr_in server;
-    char message[256], server_reply[2000];
+	/* Open the file for reading */
+	char *line_buf = NULL;
+	size_t line_buf_size = 0;
+	int line_count = 0;
+	ssize_t line_size;
+	FILE *fp = fopen(FILENAME, "r");
+	if (!fp) {
+		fprintf(stderr, "Error opening file '%s'\n", FILENAME);
+		return 1;
+	}
 
-    sock = socket(AF_INET, SOCK_STREAM, 0);
+	/* Open the socket for writing */
+	int sock;
+	struct sockaddr_in server;
+	char message[256], server_reply[2000];
 
-    if (sock == -1) {
-        printf("Could not create socket\n");
-        return 1;
-    }
+	sock = socket(AF_INET, SOCK_STREAM, 0);
 
-    printf("Socket created\n");
+	if (sock == -1) {
+		printf("Could not create socket\n");
+		return 1;
+	}
 
-    server.sin_addr.s_addr = inet_addr("127.0.0.1");
-    server.sin_family = AF_INET;
-    server.sin_port = htons(8080);
+	printf("Socket created\n");
 
-    if (connect(sock, (struct sockaddr *)&server, sizeof(server)) < 0) {
-        printf("F connect\n");
-        return 1;
-    }
+	server.sin_addr.s_addr = inet_addr("127.0.0.1");
+	server.sin_family = AF_INET;
+	server.sin_port = htons(8080);
 
-    printf("Connected\n");
+	if (connect(sock, (struct sockaddr *)&server, sizeof(server)) < 0) {
+		printf("F connect\n");
+		return 1;
+	}
 
-    /* Get the first line of the file. */
-    line_size = getline(&line_buf, &line_buf_size, fp);
+	printf("Connected\n");
 
-    /* Loop through until we are done with the file. */
-    while (line_size >= 0)
-    {
-        /* Increment our line count */
-        line_count++;
+	/* Get the first line of the file. */
+	line_size = getline(&line_buf, &line_buf_size, fp);
 
-        /* Show the line details */
-        printf("line[%06d]: chars=%06zd, buf size=%06zu, contents: %s", line_count,
-        line_size, line_buf_size, line_buf);
+	/* Loop through until we are done with the file. */
+	while (line_size >= 0) {
+		/* Increment our line count */
+		line_count++;
 
-        if(send(sock, line_buf, line_size, 0) < 0) {
-            printf("Send failed\n");
-            return 1;
-        }
+		/* Show the line details */
+		printf("line[%06d]: chars=%06zd, buf size=%06zu, contents: %s",
+		       line_count, line_size, line_buf_size, line_buf);
 
-        /* Get the next line */
-        line_size = getline(&line_buf, &line_buf_size, fp);
-    }
+		if (send(sock, line_buf, line_size, 0) < 0) {
+			printf("Send failed\n");
+			return 1;
+		}
 
-    /* Free the allocated line buffer */
-    free(line_buf);
-    line_buf = NULL;
+		/* Get the next line */
+		line_size = getline(&line_buf, &line_buf_size, fp);
+	}
 
-    /* Close the file now that we are done with it */
-    fclose(fp);
+	/* Free the allocated line buffer */
+	free(line_buf);
+	line_buf = NULL;
 
-    while(1)
-    {
-            printf("Enter message: ");
-            scanf("%s" , message);
-            strcat(message, "\n");
+	/* Close the file now that we are done with it */
+	fclose(fp);
 
-            //Send some data
-            if(send(sock, message, strlen(message), 0) < 0)
-            {
-                    printf("Send failed\n");
-                    return 1;
-            }
+	while (1) {
+		printf("Enter message: ");
+		scanf("%s", message);
+		strcat(message, "\n");
 
-            // //Receive a reply from the server
-            // if(recv(sock, server_reply, 2000, 0) < 0)
-            // {
-            //      printf("recv failed\n");
-            //      break;
-            // }
+		//Send some data
+		if (send(sock, message, strlen(message), 0) < 0) {
+			printf("Send failed\n");
+			return 1;
+		}
 
-            // printf("Server reply: ");
-            // printf("%s\n", server_reply);
-    }
+		// //Receive a reply from the server
+		// if(recv(sock, server_reply, 2000, 0) < 0)
+		// {
+		//      printf("recv failed\n");
+		//      break;
+		// }
 
-    close(sock);
-    return 0;
+		// printf("Server reply: ");
+		// printf("%s\n", server_reply);
+	}
 
+	close(sock);
+	return 0;
 
-
-
-    return 0;
+	return 0;
 }
