@@ -13,6 +13,6 @@ typedef struct challenge_t {
 	char *ans;
 } challenge_t;
 
-void run_challenges(FILE * input);
+void run_challenges(FILE *input);
 
 #endif

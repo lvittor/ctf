@@ -23,7 +23,7 @@ int main(int argc, char const *argv[])
 	/* Open the socket for writing */
 	int sock;
 	struct sockaddr_in server;
-	char message[256], server_reply[2000];
+	char message[256];
 
 	sock = socket(AF_INET, SOCK_STREAM, 0);
 

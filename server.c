@@ -6,6 +6,7 @@
 #include <strings.h>
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <unistd.h>
 #include "server.h"
 #include "challenges.h"
 
@@ -77,7 +78,7 @@ int main()
 	} else
 		printf("server accept the client...\n");
 
-	FILE * server_file = fdopen(connfd, "r");
+	FILE *server_file = fdopen(connfd, "r");
 	if (server_file == NULL) {
 		printf(":(");
 		exit(ERROR);
