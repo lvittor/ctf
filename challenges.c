@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "challenges.h"
 
 char *challenge_header = "------------- DESAFIO -------------",
@@ -89,13 +88,19 @@ static challenge_t challenges[CHALLENGES_NUMBER] = {
 	}
 };
 
-void run_challenges()
+void run_challenges(FILE * input)
 {
+	char *line_buf = NULL;
+	size_t line_buf_size = 0;
+	ssize_t line_size;
+
 	for (int i = 0; i < CHALLENGES_NUMBER; i++) {
 		printf("%s\n%s\n\n", challenge_header, challenges[i].hint);
 		if (challenges[i].research != NULL) {
 			printf("%s\n%s\n\n", research_header,
 			       challenges[i].research);
 		}
+		line_size = getline(&line_buf, &line_buf_size, input);
+		printf("{%s}\n", line_buf);
 	}
 }

@@ -77,7 +77,13 @@ int main()
 	} else
 		printf("server accept the client...\n");
 
-	run_challenges();
+	FILE * server_file = fdopen(connfd, "r");
+	if (server_file == NULL) {
+		printf(":(");
+		exit(ERROR);
+	}
+
+	run_challenges(server_file);
 
 	// After chatting close the socket
 	close(sockfd);
