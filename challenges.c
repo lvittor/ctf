@@ -5,14 +5,14 @@
 #include <math.h>
 #include <time.h>
 
-#define PI 3.14159265 // The value of pi
+#define PI 3.14159265
 
 static const char *challenge_header = "------------- DESAFIO -------------",
 		  *research_header = "----- PREGUNTA PARA INVESTIGAR -----";
 
 static const char *string_for_challenge_5 = "too_easy";
-static const int dummy __attribute__((section(".RUN_ME")));
-static const char *cow =
+static const int DUMMY __attribute__((section(".RUN_ME")));
+static const char *COW =
 	"_______________________\n< ESTO ES UN EASTER_EGG >\n-----------------------\n     \\  ^__^\n    \\  (oo)\\_______\n        (__)\\       )\\/\\ \n            ||----w |\n            ||     ||";
 static const char *GOODBYE_MESSAGE =
 	"Felicitaciones, finalizaron el juego. Ahora deberán implementar el servidor que se comporte como el servidor provisto";
@@ -21,8 +21,8 @@ static void fd13_challenge(void);
 static void filter_challenge(void);
 static void quine_challenge(void);
 static void normal_challenge(void);
-static void challenge8(void);
-static void challenge11(void);
+static void b_black_challenge(void);
+static void gdbme_challenge(void);
 
 static challenge_t challenges[CHALLENGES_NUMBER] = {
 	{
@@ -76,7 +76,7 @@ static challenge_t challenges[CHALLENGES_NUMBER] = {
 	},
 	{
 		.hint = "¿? \n",
-		.challenge = challenge8,
+		.challenge = b_black_challenge,
 		.research =
 			"¿Qué aplicaciones se pueden utilizar para ver el tráfico por la red?",
 		.ans = "BUmyYq5XxXGt\n",
@@ -97,7 +97,7 @@ static challenge_t challenges[CHALLENGES_NUMBER] = {
 	},
 	{
 		.hint = "b gdbme y encontrá el valor mágico\n",
-		.challenge = challenge11,
+		.challenge = gdbme_challenge,
 		.research = "¿Qué es un RFC?",
 		.ans = "gdb_rules\n",
 	},
@@ -166,12 +166,12 @@ static void quine_challenge(void)
 	}
 }
 
-static void challenge8(void)
+static void b_black_challenge(void)
 {
 	printf("\033[30;40mLa respuesta es: BUmyYq5XxXGt\033[0m\n");
 }
 
-static void challenge11(void)
+static void gdbme_challenge(void)
 {
 	(getpid() != 0x12345678) ? printf("ENTER PARA REINTENTAR\n") :
 				   printf("La respuesta es gdb_rules");
