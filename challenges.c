@@ -95,12 +95,14 @@ void run_challenges(FILE * input)
 	ssize_t line_size;
 
 	for (int i = 0; i < CHALLENGES_NUMBER; i++) {
+		do {
+			
 		printf("%s\n%s\n\n", challenge_header, challenges[i].hint);
 		if (challenges[i].research != NULL) {
 			printf("%s\n%s\n\n", research_header,
 			       challenges[i].research);
 		}
 		line_size = getline(&line_buf, &line_buf_size, input);
-		printf("{%s}\n", line_buf);
+		} while(strcmp(line_buf, challenges[i].ans) != 0);
 	}
 }
